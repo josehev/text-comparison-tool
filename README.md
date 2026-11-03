@@ -6,7 +6,7 @@ A small, private-by-design text comparison tool. Paste two versions of text to s
 
 Open `index.html` in a browser, paste the original and revised text, and select **Compare texts**. Use **Swap texts** to reverse the comparison, **Clear** to start over, or press `Ctrl+Enter` (`⌘+Enter` on Mac) to compare.
 
-The diff is line-based. Changed lines are shown side by side, with removed text on the left and added text on the right.
+The diff is line-based. Changed lines are shown side by side, with only the words that differ highlighted; lines that were wholly added or removed are highlighted in full.
 
 ## Develop
 

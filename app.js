@@ -127,7 +127,35 @@ function alignEdits(edits) {
   return rows;
 }
 
-function addCell(row, content, lineNumber, type) {
+function tokenize(line) {
+  return line.match(/\s+|\w+|[^\w\s]/gu) ?? [];
+}
+
+// Returns [text, isChanged] segments for each side of a replaced line pair.
+function inlineSegments(leftLine, rightLine) {
+  const edits = myersDiff(tokenize(leftLine), tokenize(rightLine));
+  const left = [];
+  const right = [];
+  const push = (segments, text, changed) => {
+    const last = segments[segments.length - 1];
+    if (last && last[1] === changed) last[0] += text;
+    else segments.push([text, changed]);
+  };
+
+  for (const edit of edits) {
+    if (edit.type === "equal") {
+      push(left, edit.left, false);
+      push(right, edit.right, false);
+    } else if (edit.type === "removed") {
+      push(left, edit.left, true);
+    } else {
+      push(right, edit.right, true);
+    }
+  }
+  return { left, right };
+}
+
+function addCell(row, content, lineNumber, type, segments) {
   const cell = document.createElement("div");
   cell.className = `diff-cell ${type || "empty"}`;
 
@@ -137,7 +165,19 @@ function addCell(row, content, lineNumber, type) {
 
   const text = document.createElement("span");
   text.className = "line-content";
-  text.textContent = content ?? "";
+  if (segments) {
+    for (const [value, changed] of segments) {
+      if (changed && value.trim() !== "") {
+        const mark = document.createElement("mark");
+        mark.textContent = value;
+        text.append(mark);
+      } else {
+        text.append(document.createTextNode(value));
+      }
+    }
+  } else {
+    text.textContent = content ?? "";
+  }
 
   cell.append(number, text);
   row.append(cell);
@@ -158,8 +198,9 @@ function renderDiff(rows, edits) {
   for (const item of rows) {
     const row = document.createElement("div");
     row.className = `diff-row ${item.type}`;
-    addCell(row, item.left, item.leftLine, item.type === "changed" || item.type === "removed" ? "removed" : "equal");
-    addCell(row, item.right, item.rightLine, item.type === "changed" || item.type === "added" ? "added" : "equal");
+    const inline = item.type === "changed" ? inlineSegments(item.left, item.right) : null;
+    addCell(row, item.left, item.leftLine, item.type === "changed" || item.type === "removed" ? "removed" : "equal", inline?.left);
+    addCell(row, item.right, item.rightLine, item.type === "changed" || item.type === "added" ? "added" : "equal", inline?.right);
     table.append(row);
   }
   output.append(table);
