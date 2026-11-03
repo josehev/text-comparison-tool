@@ -8,6 +8,37 @@ function splitLines(text) {
   return text.replace(/\r\n?/g, "\n").split("\n");
 }
 
+function updateLineNumbers(input) {
+  const body = input.closest(".editor-body");
+  const numbers = body.querySelector(".editor-line-numbers");
+  const measure = body.querySelector(".editor-measure");
+  const lines = input.value.replace(/\r\n?/g, "\n").split("\n");
+  body.style.setProperty("--line-digits", String(lines.length).length);
+  measure.style.width = `${input.clientWidth}px`;
+  measure.replaceChildren(...lines.map((line) => {
+    const element = document.createElement("span");
+    element.textContent = line || "\u200b";
+    return element;
+  }));
+  numbers.replaceChildren(...Array.from(measure.children, (line, index) => {
+    const number = document.createElement("span");
+    number.textContent = index + 1;
+    number.style.height = `${line.getBoundingClientRect().height}px`;
+    return number;
+  }));
+  numbers.style.transform = `translateY(${-input.scrollTop}px)`;
+}
+
+for (const input of [originalInput, revisedInput]) {
+  input.addEventListener("input", () => updateLineNumbers(input));
+  input.addEventListener("scroll", () => {
+    input.closest(".editor-body").querySelector(".editor-line-numbers").style.transform =
+      `translateY(${-input.scrollTop}px)`;
+  });
+  new ResizeObserver(() => updateLineNumbers(input)).observe(input);
+  updateLineNumbers(input);
+}
+
 function myersDiff(a, b) {
   const max = a.length + b.length;
   const frontier = new Map([[1, 0]]);
@@ -220,11 +251,15 @@ function compare() {
 document.querySelector("#compare").addEventListener("click", compare);
 document.querySelector("#swap").addEventListener("click", () => {
   [originalInput.value, revisedInput.value] = [revisedInput.value, originalInput.value];
+  updateLineNumbers(originalInput);
+  updateLineNumbers(revisedInput);
   compare();
 });
 document.querySelector("#clear").addEventListener("click", () => {
   originalInput.value = "";
   revisedInput.value = "";
+  updateLineNumbers(originalInput);
+  updateLineNumbers(revisedInput);
   output.replaceChildren();
   const message = document.createElement("p");
   message.className = "empty-state";

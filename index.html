@@ -27,11 +27,19 @@
         <div class="editors">
           <label class="editor" for="original">
             <span class="editor-heading"><span class="dot original-dot"></span> Original text</span>
-            <textarea id="original" spellcheck="false" placeholder="Paste your original text here…"></textarea>
+            <span class="editor-body">
+              <span class="editor-gutter" aria-hidden="true"><span class="editor-line-numbers"></span></span>
+              <textarea id="original" spellcheck="false" placeholder="Paste your original text here…"></textarea>
+              <span class="editor-measure" aria-hidden="true"></span>
+            </span>
           </label>
           <label class="editor" for="revised">
             <span class="editor-heading"><span class="dot revised-dot"></span> Revised text</span>
-            <textarea id="revised" spellcheck="false" placeholder="Paste your revised text here…"></textarea>
+            <span class="editor-body">
+              <span class="editor-gutter" aria-hidden="true"><span class="editor-line-numbers"></span></span>
+              <textarea id="revised" spellcheck="false" placeholder="Paste your revised text here…"></textarea>
+              <span class="editor-measure" aria-hidden="true"></span>
+            </span>
           </label>
         </div>
         <div class="actions">
