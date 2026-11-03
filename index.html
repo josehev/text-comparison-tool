@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>Text Compare</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Text Compare home">
+          <span class="brand-mark" aria-hidden="true">≠</span>
+          <span>Text Compare</span>
+        </a>
+        <span class="local-note"><span aria-hidden="true">●</span> Your text stays in your browser</span>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow">A simple, private diff tool</p>
+        <h1 id="page-title">See what changed.</h1>
+        <p class="subtitle">Paste two versions of your text to compare them line by line.</p>
+      </section>
+
+      <section class="compare-panel" aria-label="Text comparison">
+        <div class="editors">
+          <label class="editor" for="original">
+            <span class="editor-heading"><span class="dot original-dot"></span> Original text</span>
+            <textarea id="original" spellcheck="false" placeholder="Paste your original text here…"></textarea>
+          </label>
+          <label class="editor" for="revised">
+            <span class="editor-heading"><span class="dot revised-dot"></span> Revised text</span>
+            <textarea id="revised" spellcheck="false" placeholder="Paste your revised text here…"></textarea>
+          </label>
+        </div>
+        <div class="actions">
+          <span class="shortcut">⌘ / Ctrl + Enter to compare</span>
+          <div class="action-buttons">
+            <button class="button button-quiet" id="swap" type="button">Swap texts</button>
+            <button class="button button-quiet" id="clear" type="button">Clear</button>
+            <button class="button button-primary" id="compare" type="button">Compare texts <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="results" aria-labelledby="result-title" aria-live="polite">
+        <div class="results-heading">
+          <div>
+            <h2 id="result-title">Differences</h2>
+            <p id="result-summary">Your comparison will appear here.</p>
+          </div>
+          <div class="legend" aria-label="Diff colors">
+            <span><i class="legend-swatch removed"></i> Removed</span>
+            <span><i class="legend-swatch added"></i> Added</span>
+          </div>
+        </div>
+        <div class="diff-output" id="diff-output">
+          <p class="empty-state">Add text above, then select <strong>Compare texts</strong>.</p>
+        </div>
+      </section>
+      <footer>Line-by-line comparison · No uploads, no tracking</footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
