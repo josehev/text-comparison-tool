@@ -8,6 +8,8 @@ Open `index.html` in a browser, paste the original and revised text, and select 
 
 Both text inputs show line numbers that update as you edit and stay aligned when lines wrap, the editor is resized, or you scroll. Blank lines, including a trailing newline, are numbered too.
 
+The page follows your system light/dark setting. Use the toggle in the top right to switch themes; your choice is remembered in this browser.
+
 The diff is line-based. Changed lines are shown side by side, with only the words that differ highlighted; lines that were wholly added or removed are highlighted in full.
 
 ## Develop

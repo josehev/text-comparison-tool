@@ -248,6 +248,18 @@ function compare() {
   renderDiff(alignEdits(edits), edits);
 }
 
+const themeToggle = document.querySelector("#theme-toggle");
+function syncThemeToggle() {
+  const dark = window.textCompareTheme.current() === "dark";
+  const label = dark ? "Switch to light mode" : "Switch to dark mode";
+  themeToggle.setAttribute("aria-label", label);
+  themeToggle.title = label;
+  themeToggle.firstElementChild.textContent = dark ? "☀" : "☾";
+}
+themeToggle.addEventListener("click", () => window.textCompareTheme.toggle());
+document.addEventListener("themechange", syncThemeToggle);
+syncThemeToggle();
+
 document.querySelector("#compare").addEventListener("click", compare);
 document.querySelector("#swap").addEventListener("click", () => {
   [originalInput.value, revisedInput.value] = [revisedInput.value, originalInput.value];
